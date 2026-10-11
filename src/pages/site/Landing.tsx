@@ -12,11 +12,10 @@ export function Landing() {
   );
 
   // عرض تحدي الأسطورة فقط
-  const legendChallenge = CHALLENGES.find(
-    (c) =>
-      c.title?.includes("الأسطورة") ||
-      c.name?.includes("الأسطورة")
-  );
+ 
+const legendChallenge = CHALLENGES.find((c) =>
+  c.title.includes("الأسطورة")
+);
 
   return (
     <>
