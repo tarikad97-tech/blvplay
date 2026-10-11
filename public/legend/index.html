@@ -234,7 +234,54 @@ function drawFinal(s,now){const c=s.c,t=(now-s.tf)/1000,L=legacy(c),sm=x=>c.log.
  [["مباريات",sm("ap")],["أهداف",sm("go")],["تمريرات",sm("as")],["مع المنتخب",c.caps],["الدوريات",c.lg],["ألقاب قارية",c.ct],["أمم إفريقيا",c.af],["كأس العالم",c.wc],["الكرة الذهبية",c.bo],["الحذاء الذهبي",c.gb],["أعلى تقييم",c.peak],["أعلى قيمة",fm(c.pv)]].forEach(([l,v],i)=>{const x=108+(i%2)*440,y=1090+(i>>1)*96,q=c01(eob(c01((t-.4-i*.07)/.4)));if(q<=0)return;g.save();g.globalAlpha=c01(q);g.translate(0,(1-c01(q))*40);rect(x,y,200,80,PU);T(l,x+100,y+41,28,WH,"center",185);rect(x+206,y,200,80,WH);T(""+v,x+306,y+42,46,INK,"center",185);g.restore()});
  if(S.snap)return;if(L.p>=75||c.bo||c.wc)confetti(t);rect(290,1720,500,100,YE);T(FAN?"حفظ بطاقة المسيرة":"إنهاء وحفظ الفيديو",540,1771,42,INK,"center",460)}
 const BG=document.createElement("canvas");BG.width=36;BG.height=64;const bg=BG.getContext("2d");
-function drawCam(){const vw=vid.videoWidth,vh=vid.videoHeight;if(!vw)return;const kc=Math.max(36/vw,64/vh);bg.drawImage(vid,(36-vw*kc)/2,(64-vh*kc)/2,vw*kc,vh*kc);g.imageSmoothingEnabled=true;g.drawImage(BG,0,0,W,H);g.fillStyle="#0007";g.fillRect(0,0,W,H);const k=Math.min(W/vw,H/vh),w=vw*k,h=vh*k;g.save();g.translate(W,0);g.scale(-1,1);g.drawImage(vid,(W-w)/2,(H-h)/2,w,h);g.restore()}
+function drawCam() {
+  const vw = vid.videoWidth;
+  const vh = vid.videoHeight;
+
+  if (!vw || !vh || vid.readyState < 2) {
+    g.fillStyle = "#000";
+    g.fillRect(0, 0, W, H);
+    return;
+  }
+
+  g.save();
+  g.imageSmoothingEnabled = true;
+  g.imageSmoothingQuality = "high";
+
+  // خلفية ضبابية تملأ الشاشة العمودية بالكامل
+  const scaleBg = Math.max(W / vw, H / vh);
+  const bgW = vw * scaleBg;
+  const bgH = vh * scaleBg;
+
+  bg.clearRect(0, 0, BG.width, BG.height);
+  bg.drawImage(
+    vid,
+    (BG.width - vw * Math.max(BG.width / vw, BG.height / vh)) / 2,
+    (BG.height - vh * Math.max(BG.width / vw, BG.height / vh)) / 2,
+    vw * Math.max(BG.width / vw, BG.height / vh),
+    vh * Math.max(BG.width / vw, BG.height / vh)
+  );
+
+  g.drawImage(BG, 0, 0, W, H);
+
+  // تعتيم خفيف للخلفية
+  g.fillStyle = "#0006";
+  g.fillRect(0, 0, W, H);
+
+  // الصورة الأصلية: دون تكبير إضافي ودون قصّ
+  const scale = Math.min(W / vw, H / vh);
+  const imageW = vw * scale;
+  const imageH = vh * scale;
+  const x = (W - imageW) / 2;
+  const y = (H - imageH) / 2;
+
+  // عكس الصورة مثل الكاميرا الأمامية للهاتف
+  g.translate(W, 0);
+  g.scale(-1, 1);
+  g.drawImage(vid, W - x - imageW, y, imageW, imageH);
+
+  g.restore();
+}
 function drawPitch(){const k=g.createLinearGradient(0,0,0,H);k.addColorStop(0,"#06130c");k.addColorStop(1,"#0c2a1a");g.fillStyle=k;g.fillRect(0,0,W,H);g.strokeStyle="#1fa46355";g.lineWidth=5;g.strokeRect(70,120,W-140,H-240);g.beginPath();g.moveTo(70,H/2);g.lineTo(W-70,H/2);g.stroke();g.beginPath();g.arc(W/2,H/2,150,0,7);g.stroke();g.strokeRect(300,120,W-600,200);g.strokeRect(300,H-320,W-600,200)}
 function frame(now){g.setTransform(RES,0,0,RES,0,0);g.textBaseline="middle";g.fillStyle="#111";g.fillRect(0,0,W,H);if(FAN)drawPitch();else drawCam();
  const s=S;if(s.ph=="done"){}else if(s.ph=="final")drawFinal(s,now);else if(s.ph=="count"){const n=Math.ceil(3-(now-s.t0)/1000);rect(390,800,300,300,YE);T(""+Math.max(n,1),540,950,230,INK)}
