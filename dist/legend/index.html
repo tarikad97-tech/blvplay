@@ -1,7 +1,7 @@
 <!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>طريق الأسطورة — فلتر</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@800;900&display=swap">
 <style>
-*{box-sizing:border-box}html,body{margin:0;height:100%;background:#000;color:#fff;font-family:system-ui,Tahoma,sans-serif}
-#app{position:relative;height:100dvh;aspect-ratio:9/16;max-width:100vw;margin:auto;overflow:hidden;background:#111}
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:#000;color:#fff;font-family:system-ui,Tahoma,sans-serif}body{display:grid;place-items:center}
+#app{position:relative;width:min(100vw,calc(100dvh*9/16));height:min(100dvh,calc(100vw*16/9));overflow:hidden;background:#111}
 #v{position:absolute;width:2px;height:2px;opacity:0}canvas{width:100%;height:100%;display:block}
 #zones button{position:absolute;border:0;background:transparent;padding:0}#zones button:active{background:#ffd21a33}
 .ov{position:absolute;inset:auto 0 0;padding:16px 16px calc(env(safe-area-inset-bottom,0px) + 18px);display:grid;gap:10px;background:linear-gradient(transparent,#000c 40%)}
@@ -178,7 +178,8 @@ function tone(f,d,ty="sine",v=.4,at=0,to=0,wv=.25,lp=0){if(!ready)return;const t
 function noise(d,f0,f1,v=.4,at=0,q=1,ty="bandpass",swell=.4){if(!ready)return;const t=AC.currentTime+at,s=AC.createBufferSource();s.buffer=NB;const f=AC.createBiquadFilter();f.type=ty;f.Q.value=q;f.frequency.setValueAtTime(f0,t);f.frequency.exponentialRampToValueAtTime(f1,t+d);const e=AC.createGain();e.gain.setValueAtTime(.0001,t);e.gain.exponentialRampToValueAtTime(v,t+d*swell);e.gain.exponentialRampToValueAtTime(.0001,t+d);s.connect(f);f.connect(e);out(e,1,.3);s.start(t,Math.random()*(NB.duration-d-.1),d)}
 const SFX={
  click(){tone(950,.07,"sine",.5,0,300,.05);noise(.04,5000,3000,.2,0,1,"highpass",.2)},
- tick(){tone(880,.1,"square",.18,0,0,.1,2500)},go(){tone(1320,.35,"square",.22,0,0,.3,3000);tone(660,.35,"triangle",.3)},
+ tick(){tone(110,.35,"sine",.7,0,55,.2);tone(880,.22,"sine",.35,0,0,.35);tone(1320,.14,"triangle",.14,.01,0,.35);noise(.05,5000,3000,.15,0,1,"highpass",.2)},
+ go(){tone(523,.8,"sawtooth",.14,0,0,.45,2200);tone(784,.8,"sawtooth",.13,0,0,.45,2200);tone(1047,.9,"sawtooth",.12,.02,0,.5,2400);tone(65,.7,"sine",.8,0,40,.3);noise(.5,500,6000,.4,0,2,"bandpass",.3)},
  swoosh(){noise(.55,300,5000,.55,0,2);tone(180,.4,"sine",.25,0,60,.3)},
  impact(){tone(130,.6,"sine",.8,0,38,.4);noise(.3,3000,200,.5,0,.7,"lowpass",.05)},
  riser(){tone(160,.9,"sawtooth",.1,0,1400,.5,1800);noise(.9,400,6000,.35,0,3,"bandpass",.9)},
@@ -233,58 +234,25 @@ function drawFinal(s,now){const c=s.c,t=(now-s.tf)/1000,L=legacy(c),sm=x=>c.log.
  rect(143,820,794,86,YE);T("اكتملت المسيرة",540,864,54,INK);rect(143,906,794,150,WH);T(L.t,540,960,78,PU,"center",760);T(c.name+" · نقاط الإرث "+L.p,540,1022,34,INK,"center",760);g.restore();
  [["مباريات",sm("ap")],["أهداف",sm("go")],["تمريرات",sm("as")],["مع المنتخب",c.caps],["الدوريات",c.lg],["ألقاب قارية",c.ct],["أمم إفريقيا",c.af],["كأس العالم",c.wc],["الكرة الذهبية",c.bo],["الحذاء الذهبي",c.gb],["أعلى تقييم",c.peak],["أعلى قيمة",fm(c.pv)]].forEach(([l,v],i)=>{const x=108+(i%2)*440,y=1090+(i>>1)*96,q=c01(eob(c01((t-.4-i*.07)/.4)));if(q<=0)return;g.save();g.globalAlpha=c01(q);g.translate(0,(1-c01(q))*40);rect(x,y,200,80,PU);T(l,x+100,y+41,28,WH,"center",185);rect(x+206,y,200,80,WH);T(""+v,x+306,y+42,46,INK,"center",185);g.restore()});
  if(S.snap)return;if(L.p>=75||c.bo||c.wc)confetti(t);rect(290,1720,500,100,YE);T(FAN?"حفظ بطاقة المسيرة":"إنهاء وحفظ الفيديو",540,1771,42,INK,"center",460)}
-const BG=document.createElement("canvas");BG.width=36;BG.height=64;const bg=BG.getContext("2d");
-function drawCam() {
-  const vw = vid.videoWidth;
-  const vh = vid.videoHeight;
-
-  if (!vw || !vh || vid.readyState < 2) {
-    g.fillStyle = "#000";
-    g.fillRect(0, 0, W, H);
-    return;
-  }
-
-  g.save();
-  g.imageSmoothingEnabled = true;
-  g.imageSmoothingQuality = "high";
-
-  // خلفية ضبابية تملأ الشاشة العمودية بالكامل
-  const scaleBg = Math.max(W / vw, H / vh);
-  const bgW = vw * scaleBg;
-  const bgH = vh * scaleBg;
-
-  bg.clearRect(0, 0, BG.width, BG.height);
-  bg.drawImage(
-    vid,
-    (BG.width - vw * Math.max(BG.width / vw, BG.height / vh)) / 2,
-    (BG.height - vh * Math.max(BG.width / vw, BG.height / vh)) / 2,
-    vw * Math.max(BG.width / vw, BG.height / vh),
-    vh * Math.max(BG.width / vw, BG.height / vh)
-  );
-
-  g.drawImage(BG, 0, 0, W, H);
-
-  // تعتيم خفيف للخلفية
-  g.fillStyle = "#0006";
-  g.fillRect(0, 0, W, H);
-
-  // الصورة الأصلية: دون تكبير إضافي ودون قصّ
-  const scale = Math.min(W / vw, H / vh);
-  const imageW = vw * scale;
-  const imageH = vh * scale;
-  const x = (W - imageW) / 2;
-  const y = (H - imageH) / 2;
-
-  // عكس الصورة مثل الكاميرا الأمامية للهاتف
-  g.translate(W, 0);
-  g.scale(-1, 1);
-  g.drawImage(vid, W - x - imageW, y, imageW, imageH);
-
-  g.restore();
-}
+/* camera: full-bleed "cover" fill of the 9:16 frame (no letterbox, no blurred bars) */
+function drawCam(){const vw=vid.videoWidth,vh=vid.videoHeight;if(!vw)return;const k=Math.max(W/vw,H/vh),w=vw*k,h=vh*k;g.imageSmoothingEnabled=true;g.imageSmoothingQuality="high";g.save();g.translate(W,0);g.scale(-1,1);g.drawImage(vid,(W-w)/2,(H-h)/2,w,h);g.restore()}
 function drawPitch(){const k=g.createLinearGradient(0,0,0,H);k.addColorStop(0,"#06130c");k.addColorStop(1,"#0c2a1a");g.fillStyle=k;g.fillRect(0,0,W,H);g.strokeStyle="#1fa46355";g.lineWidth=5;g.strokeRect(70,120,W-140,H-240);g.beginPath();g.moveTo(70,H/2);g.lineTo(W-70,H/2);g.stroke();g.beginPath();g.arc(W/2,H/2,150,0,7);g.stroke();g.strokeRect(300,120,W-600,200);g.strokeRect(300,H-320,W-600,200)}
+/* cinematic countdown: vignette, draining ring, pulse wave, big numeral, progress dots, "GO" burst */
+function drawCount(now){const t=Math.max(0,(now-S.t0)/1000),go=t>=3,i=Math.min(Math.floor(t),2),f=go?t-3:t-i,n=3-i,cx=540,cy=930,R0=250;
+ g.fillStyle="#0000008c";g.fillRect(0,0,W,H);const vg=g.createRadialGradient(cx,cy,260,cx,cy,1150);vg.addColorStop(0,"#00000000");vg.addColorStop(1,"#000000d9");g.fillStyle=vg;g.fillRect(0,0,W,H);
+ const pa=c01(t/.35);g.save();g.globalAlpha=pa;g.translate(0,(1-pa)*-30);g.beginPath();g.roundRect(270,520,540,92,46);g.fillStyle=YE;g.fill();T("استعد للانطلاق",540,567,42,INK,"center",480);g.restore();
+ g.save();g.lineCap="round";g.lineWidth=24;g.strokeStyle="#ffffff2e";g.beginPath();g.arc(cx,cy,R0,0,Math.PI*2);g.stroke();
+ if(!go){g.shadowColor=YE;g.shadowBlur=46;g.strokeStyle=YE;g.beginPath();g.arc(cx,cy,R0,-Math.PI/2,-Math.PI/2+Math.PI*2*(1-f));g.stroke();g.shadowBlur=0;
+  g.globalAlpha=(1-f)*.5;g.lineWidth=6;g.strokeStyle=WH;g.beginPath();g.arc(cx,cy,R0+30+f*150,0,Math.PI*2);g.stroke();g.globalAlpha=1;
+  const sc=1+.5*(1-eoc(c01(f/.35))),al=c01((1-f)/.15);g.translate(cx,cy+10);g.scale(sc,sc);g.globalAlpha=al;g.shadowColor="#ffd21acc";g.shadowBlur=60;T(""+n,0,0,340,WH,"center",0,900)}
+ else{g.shadowColor=YE;g.shadowBlur=60;g.strokeStyle=YE;g.beginPath();g.arc(cx,cy,R0,0,Math.PI*2);g.stroke();g.shadowBlur=0;
+  const q=c01(f/.5);g.globalAlpha=(1-q)*.7;g.lineWidth=10;g.strokeStyle=YE;g.beginPath();g.arc(cx,cy,R0+q*420,0,Math.PI*2);g.stroke();g.globalAlpha=1;
+  const sc=.7+.3*eob(c01(f/.3));g.translate(cx,cy+8);g.scale(sc,sc);g.shadowColor="#ffd21acc";g.shadowBlur=60;T("انطلق!",0,0,170,YE,"center",440,900)}
+ g.restore();
+ for(let d=0;d<3;d++){g.beginPath();g.arc(cx+(d-1)*56,1270,go||d<=i?15:11,0,Math.PI*2);g.fillStyle=go||d<=i?YE:"#ffffff40";g.fill()}
+ g.save();g.shadowColor="#000000b0";g.shadowBlur=24;T("طريق الأسطورة",540,1370,70,WH,"center",760,900);g.shadowBlur=0;T("ابنِ مسيرتك من 17 إلى 38 سنة",540,1450,34,"#ffffffd0","center",760);g.restore()}
 function frame(now){g.setTransform(RES,0,0,RES,0,0);g.textBaseline="middle";g.fillStyle="#111";g.fillRect(0,0,W,H);if(FAN)drawPitch();else drawCam();
- const s=S;if(s.ph=="done"){}else if(s.ph=="final")drawFinal(s,now);else if(s.ph=="count"){const n=Math.ceil(3-(now-s.t0)/1000);rect(390,800,300,300,YE);T(""+Math.max(n,1),540,950,230,INK)}
+ const s=S;if(s.ph=="done"){}else if(s.ph=="final")drawFinal(s,now);else if(s.ph=="count")drawCount(now);
  else if(s.ph=="setup"){rect(120,800,840,130,YE);T("طريق الأسطورة",540,865,84,INK,"center",800);rect(120,930,840,120,WH);T("اختر ناديك، اتخذ قراراتك، وكن أسطورة.",540,990,40,INK,"center",800)}
  else{const t=s.stage=="chapter"?99:(now-Math.max(s.st,s.tp))/1000;layer(s);T("v1.3.0",W/2,62,26,"#ffffffe6");
   if(s.stage=="club"){banner(830,"اختر ناديك الأول",`أكثر من ${START.length} نادياً من دوريات متعددة · صفحة ${clubPage+1}/${Math.ceil(START.length/CLUB_PAGE_SIZE)}`,t);rows(s,t,10,(r,i)=>{if(i<8){const k=START[clubPage*CLUB_PAGE_SIZE+i];if(k)strip(r.x,r.y,r.w,r.h,k,"القوة",""+k.s,k.c1=="#ffffff"?k.c2:k.c1)}else{rect(r.x,r.y,r.w,r.h,i==8?PU:YE);T(i==8?"◀ السابق":"التالي ▶",r.x+r.w/2,r.y+r.h/2,34,i==8?WH:INK,"center",r.w-20)}})}
@@ -306,11 +274,11 @@ function next(i){if(S.stage=="chapter"){if(S.ch.end)fin();else{go("offers");SFX.
 function fin(){S.ph="final";S.tf=performance.now();zones();SFX.fanfare();setTimeout(SFX.whistle,400)}
 function begin(){S.name=$("nm").value.trim()||"موهبة مغربية";$("dock").classList.add("hid");S.ph="count";S.t0=performance.now();if(AC)AC.resume();
  if(window.MediaRecorder&&!FAN){const tr=[...cam.getVideoTracks(),...dest.stream.getAudioTracks()],st=new MediaStream([...cv.captureStream(30).getVideoTracks(),...dest.stream.getAudioTracks()]),mt=["video/mp4;codecs=avc1,mp4a.40.2","video/webm;codecs=vp9,opus","video/webm"].find(m=>MediaRecorder.isTypeSupported(m));try{rec=new MediaRecorder(st,{mimeType:mt,videoBitsPerSecond:4e6});rec.ondataavailable=e=>e.data.size&&chunks.push(e.data);rec.onstop=()=>{const b=new Blob(chunks,{type:rec.mimeType}),u=URL.createObjectURL(b);$("rv").src=u;$("dl").href=u;$("dl").download="career-legend."+(rec.mimeType.includes("mp4")?"mp4":"webm");$("res").style.display="grid"};rec.start(250)}catch(e){rec=null}}
- for(let i=0;i<3;i++)setTimeout(SFX.tick,i*1000);setTimeout(()=>{S.ph="play";S.tp=performance.now();SFX.go();go("club")},3000)}
+ for(let i=0;i<3;i++)setTimeout(SFX.tick,i*1000);setTimeout(SFX.go,3000);setTimeout(()=>{S.ph="play";S.tp=performance.now();go("club")},3550)}
 function stop(){if(S.ph=="done"||S.snap)return;if(FAN){S.snap=1;$("zones").innerHTML="";const wait=Math.max(0,2300-(performance.now()-S.tf));setTimeout(()=>setTimeout(()=>{cv.toBlob(b=>{if(b){const u=URL.createObjectURL(b);$("dl").href=u;$("dl").download="career-legend.png";$("dl").textContent="تنزيل بطاقة المسيرة (صورة)"}else{$("dl").classList.add("hid")}$("rv").classList.add("hid");$("res").style.display="grid"},"image/png");S.ph="done";SFX.crowdOff()},150),wait);return}S.ph="done";zones();if(rec&&rec.state!="inactive")rec.stop();else $("res").style.display="grid";SFX.crowdOff()}
 $("ps").innerHTML=Object.keys(POSAR).map(k=>`<button data-k="${k}" class="${k=="W"?"on":""}">${POSAR[k]}</button>`).join("");
 $("ps").onclick=e=>{const k=e.target.dataset.k;if(!k)return;S.pos=k;[...$("ps").children].forEach(b=>b.classList.toggle("on",b.dataset.k==k))};
-$("go").onclick=async()=>{const b=$("go");if(FAN){if(!AC)sfxInit(null);begin();return}if(cam){begin();return}b.disabled=true;try{cam=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:{ideal:960},height:{ideal:1280},frameRate:{ideal:30}},audio:{echoCancellation:true,noiseSuppression:true}});vid.srcObject=cam;await vid.play();try{const tk=cam.getVideoTracks()[0],cp=tk.getCapabilities?tk.getCapabilities():{};if(cp.zoom)await tk.applyConstraints({advanced:[{zoom:cp.zoom.min}]})}catch(e){}sfxInit(cam);b.textContent="ابدأ التسجيل ●";$("ht").textContent="اختر من أكثر من 80 نادياً، ثم اتخذ قراراتك الفنية والنفسية وعلّق بصوتك. التسجيل ينتهي تلقائياً ببطاقة الاعتزال."}catch(e){$("ht").textContent="تعذّر فتح الكاميرا أو الميكروفون: اسمح بالوصول وافتح الصفحة عبر https أو localhost."}b.disabled=false};
+$("go").onclick=async()=>{const b=$("go");if(FAN){if(!AC)sfxInit(null);begin();return}if(cam){begin();return}b.disabled=true;try{cam=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:{ideal:1080},height:{ideal:1920},aspectRatio:{ideal:9/16},frameRate:{ideal:30}},audio:{echoCancellation:true,noiseSuppression:true}});vid.srcObject=cam;await vid.play();try{const tk=cam.getVideoTracks()[0],cp=tk.getCapabilities?tk.getCapabilities():{};if(cp.zoom)await tk.applyConstraints({advanced:[{zoom:cp.zoom.min}]})}catch(e){}sfxInit(cam);b.textContent="ابدأ التسجيل ●";$("ht").textContent="اختر من أكثر من 80 نادياً، ثم اتخذ قراراتك الفنية والنفسية وعلّق بصوتك. التسجيل ينتهي تلقائياً ببطاقة الاعتزال."}catch(e){$("ht").textContent="تعذّر فتح الكاميرا أو الميكروفون: اسمح بالوصول وافتح الصفحة عبر https أو localhost."}b.disabled=false};
 if(FAN){$("go").textContent="ابدأ اللعب";$("ht").textContent="اختر من أكثر من 80 نادياً في دوريات متعددة، ثم ابنِ مسيرتك بقرارات فنية ونفسية من 17 إلى 38 سنة. لا حاجة للكاميرا ولا للميكروفون. في النهاية تحصل على بطاقة مسيرتك كصورة."}
 if(document.fonts)document.fonts.load("900 40px Cairo").catch(()=>0);
 let lastF=0;(function loop(n){requestAnimationFrame(loop);if(n-lastF<30)return;lastF=n;frame(n)})(performance.now());
