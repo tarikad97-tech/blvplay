@@ -236,45 +236,8 @@ function drawFinal(s,now){const c=s.c,t=(now-s.tf)/1000,L=legacy(c),sm=x=>c.log.
  if(S.snap)return;if(L.p>=75||c.bo||c.wc)confetti(t);rect(290,1720,500,100,YE);T(FAN?"حفظ بطاقة المسيرة":"إنهاء وحفظ الفيديو",540,1771,42,INK,"center",460)}
 /* camera: full-bleed "cover" fill of the 9:16 frame (no letterbox, no blurred bars) */
 const CAM_FIT=0; /* 0 = ملء الإطار بالكامل (قص أكبر، وجه أقرب) · 1 = عرض الكاميرا بعرض الإطار كاملاً (حواف داكنة أعلى وأسفل) */
-const BGC=document.createElement("canvas");BGC.width=18;BGC.height=32;const bgx=BGC.getContext("2d");bgx.imageSmoothingQuality="medium";let bgN=0;
-
-function drawCam() {
-  const vw = vid.videoWidth;
-  const vh = vid.videoHeight;
-
-  if (!vw || !vh) return;
-
-  // نحافظ على الحجم النسبي الأصلي لصورة الكاميرا،
-  // ونمنع التكبير الإجباري الذي يقرّب الوجه.
-  const scale = Math.min(W / vw, H / vh);
-  const dw = vw * scale;
-  const dh = vh * scale;
-
-  g.save();
-
-  // خلفية سوداء عند اختلاف نسبة أبعاد الكاميرا
-  g.fillStyle = "#000";
-  g.fillRect(0, 0, W, H);
-
-  // نفس اتجاه كاميرا السيلفي
-  g.translate(W, 0);
-  g.scale(-1, 1);
-
-  // عرض الصورة كاملة دون قصّ الوجه أو تكبيره لملء الإطار
-  g.imageSmoothingEnabled = true;
-  g.imageSmoothingQuality = "high";
-
-  g.drawImage(
-    vid,
-    (W - dw) / 2,
-    (H - dh) / 2,
-    dw,
-    dh
-  );
-
-  g.restore();
-}
-
+function drawCam(){const vw=vid.videoWidth,vh=vid.videoHeight;if(!vw)return;const kc=Math.max(W/vw,H/vh),kw=W/vw,k=kc+(kw-kc)*CAM_FIT,w=vw*k,h=vh*k;g.imageSmoothingEnabled=true;g.imageSmoothingQuality="low";g.save();g.translate(W,0);g.scale(-1,1);g.drawImage(vid,(W-w)/2,(H-h)/2,w,h);g.restore()}
+function drawPitch(){const k=g.createLinearGradient(0,0,0,H);k.addColorStop(0,"#06130c");k.addColorStop(1,"#0c2a1a");g.fillStyle=k;g.fillRect(0,0,W,H);g.strokeStyle="#1fa46355";g.lineWidth=5;g.strokeRect(70,120,W-140,H-240);g.beginPath();g.moveTo(70,H/2);g.lineTo(W-70,H/2);g.stroke();g.beginPath();g.arc(W/2,H/2,150,0,7);g.stroke();g.strokeRect(300,120,W-600,200);g.strokeRect(300,H-320,W-600,200)}
 /* cinematic countdown: vignette, draining ring, pulse wave, big numeral, progress dots, "GO" burst */
 function drawCount(now){const t=Math.max(0,(now-S.t0)/1000),go=t>=3,i=Math.min(Math.floor(t),2),f=go?t-3:t-i,n=3-i,cx=540,cy=930,R0=250;
  g.fillStyle="#0000008c";g.fillRect(0,0,W,H);const vg=g.createRadialGradient(cx,cy,260,cx,cy,1150);vg.addColorStop(0,"#00000000");vg.addColorStop(1,"#000000d9");g.fillStyle=vg;g.fillRect(0,0,W,H);
