@@ -253,7 +253,7 @@ function avatarDraw(i,x,y,r){const[a,h,st,k]=AVS[i%AVS.length];g.save();g.transl
  g.fillStyle="#1a1a1a";g.beginPath();g.arc(-r*.13,-r*.08,r*.04,0,7);g.fill();g.beginPath();g.arc(r*.13,-r*.08,r*.04,0,7);g.fill();
  g.strokeStyle="#1a1a1a";g.lineWidth=r*.04;g.lineCap="round";g.beginPath();g.arc(0,r*.04,r*.12,.2,Math.PI-.2);g.stroke();g.restore()}
 function avCanvas(i,css){const c=document.createElement("canvas");c.width=c.height=css*2;c.style.width=c.style.height=css+"px";const x=c.getContext("2d"),o=g;g=x;x.setTransform(1,0,0,1,0,0);avatarDraw(i,css,css,css);g=o;return c}
-const API="";
+const API="/api";
 function devId(){try{let i=localStorage.getItem("legend.dev");if(!i){i=crypto.randomUUID();localStorage.setItem("legend.dev",i)}return i}catch(e){return""}}
 async function remoteSubmit(e){if(!API)return;try{await fetch(API+"/scores",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({n:e.n,av:e.av,p:e.p,t:e.t,id:devId()})})}catch(_){}}
 async function remoteTop(){if(!API)return null;const r=await fetch(API+"/scores?limit=50");return r.ok?await r.json():null}
