@@ -1,0 +1,14 @@
+{
+  // DRAFT - do not add to the repo until the Cloudflare build settings have been checked.
+  "name": "carrerblvplay",              // must match the existing Worker name exactly
+  "main": "worker/index.js",
+  "compatibility_date": "2025-10-01",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"]      // only /api/* goes to the Worker; everything else is served as static files
+  },
+  "d1_databases": [
+    { "binding": "DB", "database_name": "legend-scores", "database_id": "PASTE_DATABASE_ID_HERE" }
+  ]
+}
