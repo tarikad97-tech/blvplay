@@ -2,3 +2,5 @@ User-agent: *
 Allow: /
 Disallow: /results
 Disallow: /legend/
+
+Sitemap: https://blvplay.site/sitemap.xml
