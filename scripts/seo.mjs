@@ -3,7 +3,10 @@
 // Without it, robots.txt is still written but the sitemap is skipped (a sitemap needs absolute URLs).
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 
-const site = (process.env.SITE_URL || "").replace(/\/+$/, "");
+// رابط الموقع الرسمي، مع إمكانية تغييره عبر متغير البيئة SITE_URL.
+const site = (process.env.SITE_URL || "https://blvplay.site")
+  .trim()
+  .replace(/\/+$/, "");
 const pages = [
   "/", "/challenges", "/create", "/play", "/how-it-works", "/about", "/contact",
   "/football", "/faq", "/privacy-policy", "/terms", "/cookie-policy"
