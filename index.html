@@ -1,122 +1,143 @@
+
 <!doctype html>
 <html lang="ar" dir="rtl">
   <head>
+    <!-- =========================================
+         1. إعدادات الصفحة الأساسية
+         ========================================= -->
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <!-- تحسين العرض على الهاتف والحاسوب -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+
+    <!-- لون واجهة المتصفح على الأجهزة المتوافقة -->
     <meta name="theme-color" content="#07110d" />
 
+    <!-- عنوان الصفحة الظاهر في نتائج البحث -->
     <title>BLV Play — تحديات وألعاب كرة القدم</title>
+
+    <!-- وصف الموقع لمحركات البحث -->
     <meta
       name="description"
-      content="اكتشف BLV Play، منصة تحديات كرة القدم التفاعلية. اختر أفضل اللاعبين، ابنِ تشكيلتك، واقرأ مقالات وإحصاءات عن الكرة المغربية."
+      content="اكتشف BLV Play، منصة تحديات كرة القدم التفاعلية. اختر أفضل اللاعبين، ابنِ تشكيلتك، واختبر معلوماتك الكروية بالتصوير أو دون كاميرا."
     />
-    <meta name="robots" content="index, follow, max-image-preview:large" />
+
+    <!-- السماح بفهرسة الموقع ومتابعة روابطه -->
+    <meta name="robots" content="index, follow" />
+
+    <!-- الرابط الرسمي للصفحة الرئيسية -->
     <link rel="canonical" href="https://blvplay.site/" />
 
+    <!-- =========================================
+         2. أيقونة الموقع والخطوط
+         ========================================= -->
+
+    <!-- أيقونة BLV Play الموجودة في مجلد public -->
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <!-- تسريع الاتصال بخدمة الخطوط -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+
+    <!-- الخط العربي المستخدم في الموقع -->
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap"
     />
 
+    <!-- =========================================
+         3. معلومات المشاركة على مواقع التواصل
+         ========================================= -->
+
+    <!-- إعدادات Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="ar_AR" />
     <meta property="og:site_name" content="BLV Play" />
-    <meta property="og:title" content="BLV Play — تحديات وألعاب كرة القدم" />
+    <meta
+      property="og:title"
+      content="BLV Play — تحديات وألعاب كرة القدم"
+    />
     <meta
       property="og:description"
-      content="العب تحديات كرة القدم، اختر نجومك المفضلين، واقرأ تحليلات الكرة المغربية مع BLV Play."
+      content="العب تحديات كرة القدم، اختر نجومك المفضلين، وابنِ تشكيلتك المثالية مع BLV Play."
     />
     <meta property="og:url" content="https://blvplay.site/" />
-    <!-- يجب إنشاء public/og-image.png فعلياً بقياس 1200 × 630 -->
-    <meta property="og:image" content="https://blvplay.site/og-image.png" />
-    <meta property="og:image:alt" content="BLV Play — تحديات كرة القدم التفاعلية" />
 
+    <!--
+      يجب إنشاء الصورة public/og-image.png فعلياً.
+      يفضّل أن تكون بقياس 1200 × 630 بكسل.
+    -->
+    <meta
+      property="og:image"
+      content="https://blvplay.site/og-image.png"
+    />
+    <meta
+      property="og:image:alt"
+      content="BLV Play — تحديات كرة القدم التفاعلية"
+    />
+
+    <!-- معلومات المشاركة على X ومنصات تدعم Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="BLV Play — تحديات وألعاب كرة القدم" />
+    <meta
+      name="twitter:title"
+      content="BLV Play — تحديات وألعاب كرة القدم"
+    />
     <meta
       name="twitter:description"
       content="اكتشف تحديات كرة القدم والعب بطريقتك مع BLV Play."
     />
-    <meta name="twitter:image" content="https://blvplay.site/og-image.png" />
+    <meta
+      name="twitter:image"
+      content="https://blvplay.site/og-image.png"
+    />
 
-    <!-- بيانات منظمة: تعرّف محركات البحث بالموقع -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "BLV Play",
-        "url": "https://blvplay.site/",
-        "inLanguage": "ar",
-        "description": "منصة عربية لتحديات كرة القدم التفاعلية ومقالات عن الكرة المغربية."
-      }
-    </script>
-
-    <!-- Google AdSense: لا تغيّر معرّف الناشر -->
+    <!-- =========================================
+         4. Google AdSense
+         لا تغيّر معرّف الناشر الحالي
+         ========================================= -->
     <script
       async
       src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6357752522643387"
       crossorigin="anonymous"
     ></script>
 
-    <!-- Google Analytics 4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MLBBXPCZ5B"></script>
+    <!-- =========================================
+         5. Google Analytics 4
+         لقياس الزيارات والتفاعل مع الموقع
+         ========================================= -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-MLBBXPCZ5B"
+    ></script>
+
     <script>
       window.dataLayer = window.dataLayer || [];
+
       function gtag() {
         window.dataLayer.push(arguments);
       }
+
       gtag("js", new Date());
       gtag("config", "G-MLBBXPCZ5B");
     </script>
-
-    <!-- تنسيق بسيط للمحتوى الاحتياطي فقط، ويزول مع أول رسم لـ React -->
-    <style>
-      body { margin: 0; background: #07110d; color: #fff; font-family: Tajawal, system-ui, sans-serif; }
-      .boot { max-width: 720px; margin: 0 auto; padding: 24px 16px; line-height: 1.9; }
-      .boot a { color: #ffd21a; }
-      .boot h1 { font-size: 1.9rem; line-height: 1.3; }
-    </style>
   </head>
 
   <body>
     <!--
-      لا تحذف المعرّف root. ما بداخله نص حقيقي يراه الزاحف مباشرة،
-      ثم يستبدله React عند التشغيل (createRoot يفرّغ العنصر).
+      React يعرض التطبيق ومكوناته داخل هذا العنصر.
+      لا تحذف المعرّف root لأنه مرتبط بملف main.tsx.
     -->
-    <div id="root">
-      <main class="boot">
-        <h1>BLV Play: العب تحديات كرة القدم، واقرأ قصتها</h1>
-        <p>
-          منصة عربية تجمع التحديات التفاعلية بالتحليل والأرقام: ابنِ مسيرة لاعب، رتّب أفضل النجوم،
-          واختر تشكيلتك المثالية، ثم اقرأ مقالات عن الكرة المغربية والإفريقية.
-        </p>
-        <h2>التحديات</h2>
-        <ul>
-          <li><a href="/challenges">طريق الأسطورة</a>: مسيرة لاعب من 17 إلى 38 سنة.</li>
-          <li><a href="/challenges">ترتيب أفضل 5</a>: رتّب نجومك المفضلين.</li>
-          <li><a href="/challenges">أفضل تشكيلة 4-3-3</a>: ابنِ فريقك المثالي.</li>
-        </ul>
-        <h2>مقالات الكرة المغربية</h2>
-        <ul>
-          <li><a href="/football/morocco-world-cup-2022-run">مونديال 2022: كيف بلغ المغرب نصف النهائي؟</a></li>
-          <li><a href="/football/afcon-2025-final-and-title-dispute">كأس إفريقيا 2025: من نهائي الرباط إلى نزاع اللقب</a></li>
-          <li><a href="/football/morocco-world-cup-2026-quarterfinal">مونديال 2026: ربع النهائي أمام فرنسا</a></li>
-        </ul>
-        <p>
-          <a href="/about">من نحن</a> · <a href="/how-it-works">كيف تعمل المنصة</a> ·
-          <a href="/faq">الأسئلة الشائعة</a> · <a href="/contact">اتصل بنا</a> ·
-          <a href="/privacy-policy">سياسة الخصوصية</a>
-        </p>
-      </main>
-    </div>
+    <div id="root"></div>
 
-    <noscript>
-      <p style="text-align:center;padding:16px;color:#fff">يحتاج هذا الموقع إلى تفعيل JavaScript لتشغيل التحديات.</p>
-    </noscript>
-
+    <!-- نقطة تشغيل تطبيق React وVite -->
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
+
