@@ -97,7 +97,7 @@ export const MOROCCO_ARTICLES: readonly Article[] = [
       ]
     }
   ],
-  related: ["benhasham-al-ahly-eight-players", "morocco-football-news"]
+  related: ["benhasham-al-ahly-eight-players", ]
 },
 
 
