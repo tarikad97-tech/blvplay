@@ -1,3 +1,17 @@
+import { MOROCCO_ARTICLES } from "./moroccoArticles";
+
+/** صورة داخل public. الأبعاد اختيارية، الافتراضي 1600×900 (16:9). */
+export interface ArticleImage {
+  /** مثل "/articles/my-slug/cover.webp" */
+  src: string;
+  /** وصف حقيقي للصورة لقارئات الشاشة ومحركات البحث. */
+  alt: string;
+  /** سطر صغير تحت الصورة (مصدر أو توضيح). اختياري. */
+  caption?: string;
+  width?: number;
+  height?: number;
+}
+
 export interface Article {
   slug: string;
   title: string;
@@ -5,12 +19,18 @@ export interface Article {
   /** ISO date the guide was written. */
   date: string;
   category: string;
-  /** Sections: heading + paragraphs. */
-  sections: readonly { heading: string; paragraphs: readonly string[] }[];
+  /** صورة الغلاف: تظهر في البطاقة وأعلى المقال. إن غابت يُرسم غلاف تلقائي. */
+  image?: ArticleImage;
+  /** Sections: heading + paragraphs (+ صورة اختيارية بعد العنوان). */
+  sections: readonly {
+    heading: string;
+    paragraphs: readonly string[];
+    image?: ArticleImage;
+  }[];
   related: readonly string[];
 }
 
-export const ARTICLES: readonly Article[] = [
+const GUIDE_ARTICLES: readonly Article[] = [
   {
     slug: "how-to-record-football-challenge-video",
     title: "كيف تصوّر فيديو تحدي كرة قدم عمودي ناجح",
@@ -112,6 +132,9 @@ export const ARTICLES: readonly Article[] = [
     related: ["play-without-camera-guide", "how-to-record-football-challenge-video"]
   }
 ];
+
+/** مقالات الكرة المغربية أولاً، ثم أدلة استخدام المنصة. */
+export const ARTICLES: readonly Article[] = [...MOROCCO_ARTICLES, ...GUIDE_ARTICLES];
 
 export function getArticle(slug: string): Article | undefined {
   return ARTICLES.find((a) => a.slug === slug);

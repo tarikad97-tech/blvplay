@@ -1,14 +1,14 @@
 /* BLV Play design system: tokens first, then components. Mobile-first. */
 :root {
-  --bg: #050a07;
-  --surface: #0b1510;
-  --surface-2: #10241a;
-  --line: #22372b;
-  --text: #f4f7f2;
-  --muted: #9db3a6;
-  --brand: #1fa463;
-  --brand-ink: #04140b;
-  --gold: #f6c744;
+  --bg: #0a1020;
+  --surface: #111a2e;
+  --surface-2: #18233b;
+  --line: #2a3752;
+  --text: #eef2f7;
+  --muted: #9aa8bd;
+  --brand: #e8b923;
+  --brand-ink: #0a1020;
+  --gold: #f3cb52;
   --danger: #e04141;
   --radius: 18px;
   --gap: 16px;
@@ -35,7 +35,7 @@
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 10px 22px; border-radius: 14px; border: 2px solid transparent; font: 800 1rem var(--font); cursor: pointer; text-decoration: none; transition: transform .12s, background .15s; }
 .btn:active { transform: scale(.97); }
 .btn--primary { background: var(--brand); color: var(--brand-ink); }
-.btn--primary:hover { background: #26b872; }
+.btn--primary:hover { background: #f3cb52; }
 .btn--ghost { background: transparent; color: var(--text); border-color: var(--line); }
 .btn--ghost:hover { border-color: var(--brand); }
 .btn--lg { min-height: 54px; padding-inline: 28px; font-size: 1.1rem; }
@@ -47,7 +47,7 @@ button.chip { cursor: pointer; min-height: 40px; }
 button.chip.is-on { background: var(--brand); border-color: var(--brand); color: var(--brand-ink); }
 
 /* Header */
-.header { position: sticky; top: 0; z-index: 50; background: rgba(5, 10, 7, .92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.header { position: sticky; top: 0; z-index: 50; background: rgba(10, 16, 32, .92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
 .header__inner { display: flex; align-items: center; justify-content: space-between; min-height: 64px; }
 .logo { display: inline-flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; }
 .logo__mark { display: grid; place-items: center; color: var(--brand); }
@@ -65,7 +65,7 @@ button.chip.is-on { background: var(--brand); border-color: var(--brand); color:
 }
 
 /* Hero */
-.hero { padding-block: 36px 24px; background: radial-gradient(ellipse at 70% 0%, rgba(31, 164, 99, .22), transparent 60%); }
+.hero { padding-block: 36px 24px; background: radial-gradient(ellipse at 70% 0%, rgba(232, 185, 35, .16), transparent 60%); }
 .hero__inner { display: grid; gap: 28px; align-items: center; }
 .hero h1 { font-size: clamp(2rem, 8vw, 3.6rem); line-height: 1.2; margin: 0 0 16px; }
 .hero__actions { display: flex; flex-wrap: wrap; gap: 12px; }
@@ -113,7 +113,7 @@ button.chip.is-on { background: var(--brand); border-color: var(--brand); color:
 .ticks { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
 .ticks li { position: relative; padding-inline-start: 30px; line-height: 1.7; }
 .ticks li::before { content: "✓"; position: absolute; inset-inline-start: 0; color: var(--brand); font-weight: 900; }
-.cta-band { background: linear-gradient(135deg, #0e3a24, #07110d); }
+.cta-band { background: linear-gradient(135deg, #1c2a4a, #0a1020); }
 .cta-band h2 { font-size: clamp(1.6rem, 6vw, 2.4rem); margin: 0 0 10px; }
 
 /* Filters, forms, prose */
@@ -130,7 +130,7 @@ button.chip.is-on { background: var(--brand); border-color: var(--brand); color:
 .empty { color: var(--muted); text-align: center; padding: 32px 0; }
 .prose { max-width: 760px; }
 .prose h2 { margin: 28px 0 8px; font-size: 1.4rem; }
-.prose p, .prose li { line-height: 1.9; color: #dbe6df; }
+.prose p, .prose li { line-height: 1.9; color: #d5deeb; }
 .prose ul { padding-inline-start: 22px; }
 .faq { display: grid; gap: 10px; margin: 20px 0; }
 .faq__item { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 4px 16px; }
@@ -203,7 +203,7 @@ button.chip.is-on { background: var(--brand); border-color: var(--brand); color:
 .xi__name { max-width: 74px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-shadow: 0 1px 4px #000; }
 
 /* Results */
-.result { max-width: 640px; margin: 0 auto 20px; padding: 24px 18px; text-align: center; background: linear-gradient(180deg, #07110d, #030605); border: 2px solid rgba(31, 164, 99, .45); border-radius: 22px; }
+.result { max-width: 640px; margin: 0 auto 20px; padding: 24px 18px; text-align: center; background: linear-gradient(180deg, #111a2e, #070b16); border: 2px solid rgba(232, 185, 35, .45); border-radius: 22px; }
 .result h1 { font-size: clamp(1.5rem, 6vw, 2.2rem); }
 .result__grid { list-style: none; margin: 16px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px 8px; }
 .result__grid li { display: grid; justify-items: center; gap: 4px; font-size: .9rem; }
@@ -229,14 +229,14 @@ button.chip.is-on { background: var(--brand); border-color: var(--brand); color:
 .logo__mark {
   width: 38px;
   height: 38px;
-  border: 1px solid rgba(31, 164, 99, 0.35);
+  border: 1px solid rgba(232, 185, 35, 0.35);
   border-radius: 12px;
-  background: rgba(31, 164, 99, 0.10);
+  background: rgba(232, 185, 35, 0.10);
   transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .logo:hover .logo__mark {
-  background: rgba(31, 164, 99, 0.18);
+  background: rgba(232, 185, 35, 0.18);
   border-color: var(--brand);
 }
 
@@ -251,12 +251,12 @@ button.chip.is-on { background: var(--brand); border-color: var(--brand); color:
 
 .nav__link:hover {
   color: var(--brand);
-  background: rgba(31, 164, 99, 0.08);
+  background: rgba(232, 185, 35, 0.08);
 }
 
 .nav__link.is-active {
   color: var(--brand);
-  background: rgba(31, 164, 99, 0.10);
+  background: rgba(232, 185, 35, 0.10);
 }
 
 /* زر القائمة على الهاتف */
@@ -306,3 +306,7 @@ button.chip.is-on { background: var(--brand); border-color: var(--brand); color:
     transition: none;
   }
 }
+
+/* الشعار الصوري (مكوّن Logo) داخل الهيدر والفوتر */
+.logo img { display: block; height: 40px; width: auto; }
+.footer__brand .logo img { height: 48px; }

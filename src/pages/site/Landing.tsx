@@ -1,59 +1,137 @@
-
 import { CardsArt, PhoneArt, PitchArt } from "../../components/Art";
+import { ArticleCard } from "../../components/ArticleCard";
 import { ChallengeCard } from "../../components/ChallengeCard";
+import { HeroSlider, type HeroSlide } from "../../components/HeroSlider";
+import { ARTICLES } from "../../data/articles";
 import { CHALLENGES } from "../../data/challenges";
 import { Link } from "../../lib/router";
 import { useMeta } from "../../lib/useMeta";
+import "../../styles/home.css";
+
+/**
+ * الشرائح الثلاث. كل شريحة ترسم SVG أصلياً من مكوّنات Art عندك.
+ * الصور تملأ الشريحة كلها: 1.webp للحاسوب (16:9) و1-m.webp للهاتف (2:3)
+ * داخل public/slides/. إذا لم يوجد الملف يعود السلايدر تلقائياً إلى الرسم،
+ * فلا تظهر صورة مكسورة. imageAlt فارغ لأن النص بجانب الصورة يشرح المعنى؛
+ * اكتب وصفاً فقط إن كانت الصورة تحمل معلومة غير مكتوبة.
+ */
+const SLIDES: readonly HeroSlide[] = [
+  {
+    id: "news",
+    eyebrow: "أخبار وتحليلات",
+    title: "كرة القدم المغربية في مكان واحد",
+    text: "مقالات واضحة عن المنتخب والبطولة الاحترافية وكأس أمم أفريقيا، نحدّثها كلما تغيّرت الوقائع.",
+    cta: { to: "/football", label: "اقرأ المقالات" },
+    cta2: { to: "/challenges", label: "جرّب التحديات" },
+    art: <PitchArt className="hslide__svg" />,
+    accent: "#34d399",
+    glow: "rgba(52, 211, 153, 0.18)",
+    image: "/slides/1.webp",
+    imageMobile: "/slides/1-m.webp",
+    imageAlt: "",
+  },
+  {
+    id: "legend",
+    eyebrow: "تحدٍّ تفاعلي",
+    title: "ابدأ لاعباً بعمر 17 سنة وابنِ مسيرتك",
+    text: "في تحدي «طريق الأسطورة» تختار ناديك وقراراتك وعروض الانتقال حتى الاعتزال، وتكتشف هل تصبح أسطورة.",
+    cta: { to: "/challenges", label: "ابدأ التحدي" },
+    cta2: { to: "/play", label: "العب الآن" },
+    art: <PhoneArt className="hslide__svg" />,
+    accent: "#f3cb52",
+    glow: "rgba(232, 185, 35, 0.2)",
+    image: "/slides/2.webp",
+    imageMobile: "/slides/2-m.webp",
+    imageAlt: "",
+  },
+  {
+    id: "modes",
+    eyebrow: "بدون حساب",
+    title: "العب دون كاميرا أو صوّر نفسك",
+    text: "وضع المشجع لا يطلب كاميرا ولا ميكروفوناً ولا حساباً. ووضع صانع المحتوى يصنع فيديو عمودياً يبقى على جهازك.",
+    cta: { to: "/play", label: "ابدأ اللعب" },
+    cta2: { to: "/create", label: "أنشئ فيديو" },
+    art: <CardsArt className="hslide__svg" />,
+    accent: "#5aa9ff",
+    glow: "rgba(90, 169, 255, 0.2)",
+    image: "/slides/3.webp",
+    imageMobile: "/slides/3-m.webp",
+    imageAlt: "",
+  },
+];
 
 export function Landing() {
   useMeta(
-    "BLV Play — العب، اختَر، تحدَّ",
-    "منصة تحديات كرة القدم التفاعلية: اختر أفضل اللاعبين، ابنِ تشكيلتك، وشارك بالتصوير أو دون كاميرا."
+    "BLV Play — أخبار كرة القدم المغربية وتحديات تفاعلية",
+    "تابع أبرز أحداث الكرة المغربية من المنتخب والبطولة الاحترافية وكأس أمم أفريقيا، وشارك في تحديات كروية تفاعلية بالتصوير أو دون كاميرا."
   );
 
-  // عرض تحدي الأسطورة فقط
- 
-const legendChallenge = CHALLENGES.find((c) =>
-  c.title.includes("الأسطورة")
-);
+  // تحدي الأسطورة فقط
+  const legendChallenge = CHALLENGES.find((c) =>
+    c.title.includes("الأسطورة")
+  );
+
+  // أحدث 5 مقالات: بطاقة كبيرة + أربع بطاقات تملأ الشبكة تماماً.
+  const latest = [...ARTICLES]
+    .sort((a, b) => b.date.localeCompare(a.date))
+    .slice(0, 5);
 
   return (
     <>
-      <section className="hero">
-        <div className="container hero__inner">
-          <div className="hero__text">
-            <p className="eyebrow">
-              BLV Play — العب، اختَر، تحدَّ.
-            </p>
+      {/* عنوان الصفحة الوحيد (h1) لمحركات البحث وقارئات الشاشة */}
+      <h1 className="sr-only">
+        BLV Play: أخبار كرة القدم المغربية وتحليلاتها وتحديات تفاعلية
+      </h1>
 
-            <h1>تحديات كرة القدم. اختياراتك هي الحكم.</h1>
+      <HeroSlider slides={SLIDES} label="تعريف بموقع BLV Play" />
 
-            <p className="lead">
-              اختبر معرفتك بكرة القدم، اختر أفضل اللاعبين، ابنِ
-              تشكيلتك المثالية، وشارك في تحديات تفاعلية ممتعة.
-            </p>
-
-            <div className="hero__actions">
-              <Link
-                to="/challenges"
-                className="btn btn--primary btn--lg"
-              >
-                اكتشف التحديات
-              </Link>
-
-              <Link
-                to="/create"
-                className="btn btn--ghost btn--lg"
-              >
-                أنشئ فيديو
-              </Link>
+      {/* آخر المقالات */}
+      <section className="hsec">
+        <div className="container">
+          <div className="hsec__head">
+            <div>
+              <h2 className="hsec__title">آخر المقالات</h2>
+              <p className="hsec__sub">
+                أخبار الكرة المغربية وتحليلاتها، وأدلة استخدام المنصة.
+              </p>
             </div>
+
+            <Link to="/football" className="link">
+              كل المقالات ←
+            </Link>
           </div>
 
-          <div className="hero__art" aria-hidden="false">
-            <PitchArt className="hero__pitch" />
-            <PhoneArt className="hero__phone" />
+          <div className="agrid">
+            {latest.map((article, i) => (
+              <ArticleCard
+                key={article.slug}
+                article={article}
+                featured={i === 0}
+              />
+            ))}
           </div>
+        </div>
+      </section>
+
+      {/* تعريف بالموقع */}
+      <section className="section section--alt">
+        <div className="container prose">
+          <h2 className="section__title">ما هي BLV Play؟</h2>
+
+          <p>
+            BLV Play موقع عربي لمشجعي كرة القدم. يجمع بين شيئين: مقالات
+            تشرح ما يجري في الكرة المغربية والأفريقية، وتحديات تفاعلية
+            تحوّل المتابعة إلى لعب. بعد أن تقرأ عن مشوار المنتخب في
+            المونديال أو عن لقب البطولة الاحترافية، يمكنك أن تبني
+            تشكيلتك الخاصة وتدافع عن اختياراتك.
+          </p>
+
+          <p>
+            نكتب مقالاتنا بالاعتماد على تقارير منشورة ومصادر رسمية،
+            ونذكر في كل مقال ما هو مؤكد وما لا يزال مفتوحاً، ونحدّث
+            النص عندما تتغير الوقائع. وإذا لاحظت خطأً، فراسلنا عبر
+            صفحة <Link to="/contact" className="link">اتصل بنا</Link>.
+          </p>
         </div>
       </section>
 
@@ -72,8 +150,8 @@ const legendChallenge = CHALLENGES.find((c) =>
                 <h3 className="card__title">صوّر تحديك</h3>
 
                 <p className="card__text">
-                  سجّل اختياراتك وردود فعلك وأنشئ فيديوهات كرة
-                  قدم جاهزة للمشاركة.
+                  سجّل اختياراتك وردود فعلك وأنشئ فيديوهات كرة قدم
+                  جاهزة للمشاركة.
                 </p>
 
                 <Link to="/create" className="btn btn--primary">
@@ -92,8 +170,8 @@ const legendChallenge = CHALLENGES.find((c) =>
                 <h3 className="card__title">شارك بدون تصوير</h3>
 
                 <p className="card__text">
-                  اختر لاعبيك المفضلين واختبر معرفتك بكرة القدم
-                  دون تشغيل الكاميرا.
+                  اختر لاعبيك المفضلين واختبر معرفتك بكرة القدم دون
+                  تشغيل الكاميرا.
                 </p>
 
                 <Link to="/play" className="btn btn--primary">
@@ -105,7 +183,7 @@ const legendChallenge = CHALLENGES.find((c) =>
         </div>
       </section>
 
-      {/* تحدي الأسطورة فقط */}
+      {/* تحدي الأسطورة */}
       <section className="section section--alt">
         <div className="container">
           <h2 className="section__title">تحدي الأسطورة</h2>
@@ -120,14 +198,14 @@ const legendChallenge = CHALLENGES.find((c) =>
             </div>
           ) : (
             <p className="center">
-              لم يتم العثور على تحدي الأسطورة.
-              تحقق من اسم التحدي في ملف data/challenges.
+              لم يتم العثور على تحدي الأسطورة. تحقق من اسم التحدي في
+              ملف data/challenges.
             </p>
           )}
 
           <p className="center">
             <Link to="/challenges" className="link">
-              اكتشف تحدي الأسطورة ←
+              كل التحديات ←
             </Link>
           </p>
         </div>
@@ -135,9 +213,7 @@ const legendChallenge = CHALLENGES.find((c) =>
 
       <section className="section">
         <div className="container">
-          <h2 className="section__title">
-            كيف تعمل المنصة في 3 خطوات
-          </h2>
+          <h2 className="section__title">كيف تعمل المنصة في 3 خطوات</h2>
 
           <ol className="steps">
             <li>
@@ -170,7 +246,8 @@ const legendChallenge = CHALLENGES.find((c) =>
               <li>فيديو عمودي 9:16 بدقة 1080×1920</li>
               <li>الأسئلة والاختيارات تظهر داخل الفيديو نفسه</li>
               <li>
-                تسجيل بصوتك وصورتك، وتبديل بين الكاميرا الأمامية والخلفية
+                تسجيل بصوتك وصورتك، وتبديل بين الكاميرا الأمامية
+                والخلفية
               </li>
               <li>الفيديو يبقى على جهازك ولا يُرفع إلى أي خادم</li>
             </ul>
@@ -195,14 +272,9 @@ const legendChallenge = CHALLENGES.find((c) =>
         <div className="container center">
           <h2>جاهز لتتحدى أصدقاءك؟</h2>
 
-          <p className="lead">
-            ابدأ تحدياً الآن، فلا حاجة إلى حساب.
-          </p>
+          <p className="lead">ابدأ تحدياً الآن، فلا حاجة إلى حساب.</p>
 
-          <Link
-            to="/play"
-            className="btn btn--primary btn--lg"
-          >
+          <Link to="/play" className="btn btn--primary btn--lg">
             ابدأ اللعب
           </Link>
         </div>

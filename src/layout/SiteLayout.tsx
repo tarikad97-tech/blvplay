@@ -3,21 +3,40 @@ import { Link, usePathname } from "../lib/router";
 
 const NAV = [
   { to: "/", label: "الرئيسية" },
+  { to: "/football", label: "المقالات" },
   { to: "/challenges", label: "التحديات" },
   { to: "/how-it-works", label: "كيف تعمل المنصة" },
   { to: "/about", label: "من نحن" }
 ];
 
+/**
+ * الشعار: صورة public/logo.webp (640×324). الحجم من CSS (.logo img).
+ * إذا لم يُوجد الملف يعود تلقائياً إلى الرمز والنص القديمين.
+ */
 export function Logo() {
+  const [failed, setFailed] = useState(false);
+
   return (
     <Link to="/" className="logo" aria-label="BLV Play — الرئيسية">
-      <span className="logo__mark" aria-hidden="true">
-        <svg viewBox="0 0 24 24" width="22" height="22">
-          <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="1.8" />
-          <path d="M12 7.2l4.2 3-1.6 4.9H9.4L7.8 10.2z" fill="currentColor" />
-        </svg>
-      </span>
-      <span className="logo__text" dir="ltr">BLV <b>Play</b></span>
+      {failed ? (
+        <>
+          <span className="logo__mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22">
+              <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="1.8" />
+              <path d="M12 7.2l4.2 3-1.6 4.9H9.4L7.8 10.2z" fill="currentColor" />
+            </svg>
+          </span>
+          <span className="logo__text" dir="ltr">BLV <b>Play</b></span>
+        </>
+      ) : (
+        <img
+          src="/logo.webp"
+          alt=""
+          width={79}
+          height={40}
+          onError={() => setFailed(true)}
+        />
+      )}
     </Link>
   );
 }
@@ -33,11 +52,24 @@ function Header() {
       <div className="container header__inner">
         <Logo />
         <nav className={open ? "nav is-open" : "nav"} aria-label="التنقل الرئيسي" id="main-nav">
-          {NAV.map((item) => (
-            <Link key={item.to} to={item.to} className={pathname === item.to ? "nav__link is-active" : "nav__link"}>
-              {item.label}
-            </Link>
-          ))}
+          {NAV.map((item) => {
+            // صفحات المقالات الفرعية (/football/slug) تُفعّل رابط «المقالات» أيضاً.
+            const active =
+              item.to === "/"
+                ? pathname === "/"
+                : pathname === item.to || pathname.startsWith(`${item.to}/`);
+
+            return (
+              <Link
+                key={item.to}
+                to={item.to}
+                className={active ? "nav__link is-active" : "nav__link"}
+                aria-current={active ? "page" : undefined}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
           <Link to="/play" className="btn btn--primary nav__cta">ابدأ اللعب</Link>
         </nav>
         <button
@@ -61,7 +93,7 @@ function Footer() {
       <div className="container footer__grid">
         <div className="footer__brand">
           <Logo />
-          <p>منصتك لتحديات كرة القدم التفاعلية</p>
+          <p>أخبار الكرة المغربية وتحليلاتها، وتحديات كروية تفاعلية.</p>
         </div>
         <FooterCol title="استكشف" links={[
           ["/", "الرئيسية"], ["/challenges", "التحديات"], ["/create", "صانع المحتوى"],

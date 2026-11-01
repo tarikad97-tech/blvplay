@@ -1,0 +1,661 @@
+/* ==========================================================
+   الصفحة الرئيسية: السلايدر وبطاقات المقالات
+   تعتمد على متغيرات site.css (--bg و--surface و--brand...) فتتغير
+   اللوحة كلها من مكان واحد. التباين محسوب ويتجاوز 4.5:1 (WCAG AA).
+   ========================================================== */
+.hslider,
+.acard,
+.hsec {
+  --h-bg: var(--bg);
+  --h-card: var(--surface);
+  --h-card-2: var(--surface-2);
+  --h-line: rgba(255, 255, 255, 0.09);
+  --h-text: var(--text);
+  --h-soft: #c9d3e3;
+  --h-muted: var(--muted);
+  --h-accent: var(--brand);
+  --h-accent-soft: var(--gold);
+  --h-accent-bg: rgba(232, 185, 35, 0.14);
+}
+
+/* لا نعتمد على box-sizing عام في ملف آخر */
+.hslider,
+.hslider *,
+.hslider *::before,
+.hslider *::after,
+.acard,
+.acard *,
+.hsec,
+.hsec * {
+  box-sizing: border-box;
+}
+
+/* ---------- السلايدر ---------- */
+.hslider {
+  position: relative;
+  overflow: hidden;
+  background: var(--h-bg);
+  color: var(--h-text);
+  border-bottom: 1px solid var(--h-line);
+}
+
+/* الزر الرئيسي يأخذ لونه من site.css. نغيّر الزر الشفاف فقط ليظهر فوق الصور */
+.hslider .btn--ghost {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.hslider .btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+/* كل الشرائح في الخلية نفسها، فيأخذ السلايدر ارتفاع أطولها.
+   pan-y: التمرير العمودي للصفحة يعمل، والسحب الأفقي يصل إلى السلايدر. */
+.hslider__track {
+  display: grid;
+  touch-action: pan-y;
+}
+
+.hslide {
+  grid-area: 1 / 1;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.9s ease, visibility 0s linear 0.9s;
+  background:
+    radial-gradient(
+      900px 420px at 85% 20%,
+      var(--slide-glow, rgba(232, 185, 35, 0.18)),
+      transparent 70%
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.022) 0 70px,
+      transparent 70px 140px
+    ),
+    var(--h-bg);
+}
+
+.hslide.is-active {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.9s ease, visibility 0s;
+}
+
+.hslide__in {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  align-items: center;
+  padding-top: 36px;
+  padding-bottom: 96px;
+}
+
+.hslide__eyebrow {
+  display: inline-block;
+  margin: 0 0 12px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--slide-accent, var(--h-accent));
+  background: rgba(10, 16, 32, 0.55);
+  border: 1px solid var(--h-line);
+  backdrop-filter: blur(6px);
+}
+
+.hslide__title {
+  margin: 0 0 14px;
+  font-size: clamp(1.75rem, 4.8vw, 3.1rem);
+  line-height: 1.3;
+  color: #fff;
+  text-wrap: balance;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.45);
+}
+
+.hslide__lead {
+  margin: 0 0 24px;
+  max-width: 54ch;
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  line-height: 1.9;
+  color: var(--h-soft);
+}
+
+.hslide__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* --- وضع الرسم (عند غياب الصورة) --- */
+.hslide__art {
+  display: grid;
+  place-items: center;
+  max-height: 300px;
+  min-height: 0;
+}
+
+.hslide__art > svg,
+.hslide__art > img {
+  width: 100%;
+  max-width: 460px;
+  height: auto;
+  max-height: 300px;
+  object-fit: contain;
+  border-radius: 14px;
+}
+
+/* --- وضع الصورة الكاملة --- */
+.hslide__bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.hslide__bg picture,
+.hslide__bg img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.hslide__bg img {
+  object-fit: cover;
+  object-position: center;
+  transform: scale(1.12);
+  will-change: transform;
+}
+
+/* تكبير بطيء مع إزاحة خفيفة أثناء ظهور الشريحة */
+.hslide.is-active .hslide__bg img {
+  animation: hzoom 9s ease-out both;
+}
+
+/* طبقة تغميق تضمن وضوح النص فوق أي صورة (تباين ≥ 4.7:1 في أسوأ حالة) */
+.hslide__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(10, 16, 32, 0.94) 0%,
+    rgba(10, 16, 32, 0.84) 40%,
+    rgba(10, 16, 32, 0.2) 78%,
+    rgba(10, 16, 32, 0) 100%
+  );
+}
+
+.hslide--image {
+  min-height: 560px;
+  min-height: clamp(500px, 76svh, 640px);
+}
+
+.hslide--image .hslide__in {
+  align-content: end;
+  min-height: inherit;
+}
+
+/* حركات */
+@keyframes hrise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes hfloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes hzoom {
+  from {
+    transform: scale(1.12) translate3d(1.5%, 0, 0);
+  }
+  to {
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+}
+
+@keyframes hbar {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.hslide.is-active .hslide__text > * {
+  animation: hrise 0.8s ease both;
+}
+.hslide.is-active .hslide__text > :nth-child(2) {
+  animation-delay: 0.1s;
+}
+.hslide.is-active .hslide__text > :nth-child(3) {
+  animation-delay: 0.2s;
+}
+.hslide.is-active .hslide__text > :nth-child(4) {
+  animation-delay: 0.3s;
+}
+.hslide.is-active .hslide__art {
+  animation: hfloat 6s ease-in-out infinite;
+}
+
+/* أدوات التحكم */
+.hslider__ctrl {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 20px;
+  z-index: 2;
+}
+
+.hslider__ctrl-in {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.hslider__dots {
+  display: flex;
+  gap: 8px;
+}
+
+.hslider__dot {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: width 0.3s ease, background 0.3s ease;
+}
+
+.hslider__dot {
+  position: relative;
+}
+
+/* النقطة 10px فقط؛ هذه تمنح إصبعك منطقة لمس نحو 32px */
+.hslider__dot::after {
+  content: "";
+  position: absolute;
+  inset: -12px -5px;
+}
+
+.hslider__dot.is-on {
+  width: 30px;
+  background: var(--h-accent);
+}
+
+.hslider__btns {
+  display: flex;
+  gap: 8px;
+}
+
+.hslider__btn {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(10, 16, 32, 0.55);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.hslider__btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.hslider__dot:focus-visible,
+.hslider__btn:focus-visible {
+  outline: 2px solid var(--h-accent);
+  outline-offset: 3px;
+}
+
+.hslider__bar {
+  position: absolute;
+  z-index: 2;
+  inset-inline-start: 0;
+  bottom: 0;
+  height: 3px;
+  width: 0;
+  background: var(--h-accent);
+  animation: hbar linear forwards;
+}
+
+.hslider.is-paused .hslider__bar {
+  animation-play-state: paused;
+}
+
+/* ---- الهاتف (تحت 860px) ---- */
+@media (max-width: 859px) {
+  .hslide__in {
+    padding-top: 22px;
+  }
+
+  /* الرسم فوق النص وبحجم أصغر، بدل أن يدفع الأزرار إلى أسفل الشاشة */
+  .hslide__art {
+    order: -1;
+    max-height: none;
+  }
+
+  .hslide__art > svg,
+  .hslide__art > img {
+    width: auto;
+    max-width: 100%;
+    height: 150px;
+    max-height: none;
+  }
+
+  /* الصورة الكاملة: النص في الأسفل دائماً */
+  .hslide--image .hslide__in {
+    padding-top: 0;
+  }
+
+  /* الزران في صف واحد حتى على الهواتف الضيقة (360px) */
+  .hslide__actions .btn {
+    flex: 1 1 140px;
+    min-width: 0;
+    padding-inline: 12px;
+    min-height: 50px;
+    font-size: 1rem;
+  }
+
+  /* النص التعريفي: 3 أسطر كحد أقصى كي لا يغطي الصورة */
+  .hslide__lead {
+    display: -webkit-box;
+    margin-bottom: 18px;
+    overflow: hidden;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+
+  /* أهداف لمس مريحة */
+  .hslider__btn {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* الهواتف القصيرة: سطران فقط */
+@media (max-width: 859px) and (max-height: 700px) {
+  .hslide__lead {
+    -webkit-line-clamp: 2;
+  }
+}
+
+@media (min-width: 860px) {
+  .hslide__in {
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 48px;
+    padding-top: 56px;
+    padding-bottom: 88px;
+    min-height: 420px;
+  }
+
+  /* الصورة الكاملة: عمود نص واحد على جهة القراءة، والصورة تظهر في الجهة الأخرى */
+  .hslide--image {
+    min-height: 520px;
+  }
+
+  .hslide--image .hslide__in {
+    grid-template-columns: minmax(0, 560px);
+    align-content: center;
+  }
+
+  .hslide__scrim {
+    background: linear-gradient(
+      to left,
+      rgba(10, 16, 32, 0.93) 0%,
+      rgba(10, 16, 32, 0.82) 36%,
+      rgba(10, 16, 32, 0.22) 70%,
+      rgba(10, 16, 32, 0) 100%
+    );
+  }
+
+  html[dir="ltr"] .hslide__scrim {
+    background: linear-gradient(
+      to right,
+      rgba(10, 16, 32, 0.93) 0%,
+      rgba(10, 16, 32, 0.82) 36%,
+      rgba(10, 16, 32, 0.22) 70%,
+      rgba(10, 16, 32, 0) 100%
+    );
+  }
+}
+
+/* ---------- أقسام الصفحة ---------- */
+.hsec {
+  padding: 56px 0;
+}
+
+.hsec__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px 16px;
+  margin-bottom: 24px;
+}
+
+.hsec__title {
+  margin: 0;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+}
+
+.hsec__sub {
+  margin: 6px 0 0;
+  color: var(--h-muted);
+}
+
+/* ---------- بطاقات المقالات ---------- */
+.agrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.acard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: var(--h-text);
+  background: var(--h-card);
+  border: 1px solid var(--h-line);
+  border-radius: 16px;
+  transition: transform 0.25s ease, border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.acard:hover {
+  transform: translateY(-4px);
+  border-color: rgba(232, 185, 35, 0.55);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.4);
+}
+
+.acard:focus-within {
+  outline: 2px solid var(--h-accent);
+  outline-offset: 2px;
+}
+
+.acard__cover {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+
+.acard__cover svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s ease;
+}
+
+.acard:hover .acard__cover svg {
+  transform: scale(1.06);
+}
+
+.acard__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 18px 18px;
+}
+
+.acard__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: var(--h-muted);
+}
+
+.acard__chip {
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-weight: 700;
+  color: var(--h-accent-soft);
+  background: var(--h-accent-bg);
+}
+
+.acard__title {
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.55;
+}
+
+.acard__link {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* تجعل البطاقة كلها قابلة للنقر */
+.acard__link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.acard__link:focus-visible {
+  outline: none;
+}
+
+.acard__excerpt {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  font-size: 0.93rem;
+  line-height: 1.85;
+  color: var(--h-soft);
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.acard__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid var(--h-line);
+  font-size: 0.82rem;
+  color: var(--h-muted);
+}
+
+.acard__more {
+  font-weight: 700;
+  color: var(--h-accent-soft);
+}
+
+@media (min-width: 640px) {
+  .agrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .acard--featured {
+    grid-column: span 2;
+  }
+}
+
+@media (min-width: 1000px) {
+  .agrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .acard--featured {
+    flex-direction: row;
+  }
+
+  .acard--featured .acard__cover {
+    flex: 0 0 50%;
+    aspect-ratio: auto;
+    min-height: 280px;
+  }
+
+  .acard--featured .acard__body {
+    justify-content: center;
+    padding: 24px 26px;
+  }
+
+  .acard--featured .acard__title {
+    font-size: 1.45rem;
+  }
+
+  .acard--featured .acard__excerpt {
+    -webkit-line-clamp: 4;
+    font-size: 1rem;
+  }
+}
+
+/* احترام تفضيل تقليل الحركة */
+@media (prefers-reduced-motion: reduce) {
+  .hslide,
+  .hslide.is-active {
+    transition: none;
+  }
+
+  .hslide.is-active .hslide__text > *,
+  .hslide.is-active .hslide__art,
+  .hslide.is-active .hslide__bg img {
+    animation: none;
+  }
+
+  .hslide__bg img {
+    transform: none;
+  }
+
+  .acard,
+  .acard__cover svg {
+    transition: none;
+  }
+
+  .acard:hover {
+    transform: none;
+  }
+
+  .acard:hover .acard__cover svg {
+    transform: none;
+  }
+}
