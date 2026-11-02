@@ -197,6 +197,124 @@ function prepareHtml(template, article, articlesBySlug) {
   );
 }
 
+
+function prepareFootballIndexHtml(template, articles) {
+  const title = "مركز المقالات | أخبار وتحليلات كرة القدم | BLV Play";
+  const description =
+    "أخبار وتحليلات كرة القدم المغربية: المنتخب والبطولة الاحترافية وكأس أمم أفريقيا، إضافة إلى أدلة استخدام تحديات BLV Play.";
+
+  const sorted = [...articles].sort((a, b) =>
+    b.date.localeCompare(a.date)
+  );
+
+  const cardsHtml = sorted
+    .map((article, index) => {
+      const url = `/football/${encodeURIComponent(article.slug)}`;
+
+      const cover = article.image?.src
+        ? `
+          <img
+            src="${escapeHtml(article.image.src)}"
+            alt=""
+            width="${Number(article.image.width) || 1600}"
+            height="${Number(article.image.height) || 900}"
+            loading="lazy"
+            decoding="async"
+          />
+        `
+        : `
+          <div class="acard__cover-fallback">
+            ${escapeHtml(article.category)}
+          </div>
+        `;
+
+      const paragraphs = (article.sections || [])
+        .flatMap((section) => section.paragraphs || []);
+
+      const wordCount = paragraphs.join(" ").trim().split(/\s+/).filter(Boolean).length;
+      const readingTime = `${Math.max(1, Math.ceil(wordCount / 200))} دقائق قراءة`;
+
+      return `
+        <article class="${index === 0 ? "acard acard--featured" : "acard"}">
+          <div class="acard__cover">
+            ${cover}
+          </div>
+
+          <div class="acard__body">
+            <div class="acard__meta">
+              <span class="acard__chip">${escapeHtml(article.category)}</span>
+              <time datetime="${escapeHtml(article.date)}">
+                ${escapeHtml(formatDate(article.date))}
+              </time>
+            </div>
+
+            <h2 class="acard__title">
+              <a class="acard__link" href="${url}">
+                ${escapeHtml(article.title)}
+              </a>
+            </h2>
+
+            <p class="acard__excerpt">
+              ${escapeHtml(article.excerpt || "")}
+            </p>
+
+            <div class="acard__foot">
+              <span>${readingTime}</span>
+              <span class="acard__more" aria-hidden="true">
+                اقرأ المقال ←
+              </span>
+            </div>
+          </div>
+        </article>
+      `;
+    })
+    .join("\n");
+
+  let html = template.replace(
+    /<title>[\s\S]*?<\/title>/i,
+    `<title>${escapeHtml(title)}</title>`
+  );
+
+  html = html.replace(
+    /<link\s+rel=["']canonical["'][^>]*>/i,
+    ""
+  );
+
+  html = html.replace(
+    "</head>",
+    `  <link rel="canonical" href="${site}/football" />\n  </head>`
+  );
+
+  html = replaceMeta(html, "name", "description", description);
+  html = replaceMeta(html, "property", "og:title", title);
+  html = replaceMeta(html, "property", "og:description", description);
+  html = replaceMeta(html, "property", "og:url", `${site}/football`);
+  html = replaceMeta(html, "property", "og:type", "website");
+
+  if (!html.includes('<div id="root"></div>')) {
+    throw new Error("لم يتم العثور على عنصر root في dist/index.html");
+  }
+
+  const content = `
+    <main class="container page">
+      <h1>مركز المقالات</h1>
+      <p class="lead">
+        أخبار الكرة المغربية وتحليلاتها، وأدلة عملية للاستفادة من التحديات.
+      </p>
+
+      <div class="agrid">
+        ${cardsHtml}
+      </div>
+    </main>
+  `;
+
+  return html.replace(
+    '<div id="root"></div>',
+    `<div id="root" data-prerendered="true">${content}</div>`
+  );
+}
+
+
 let vite;
 
 try {
@@ -244,7 +362,22 @@ try {
 
     console.log(`Generated: /football/${article.slug}/`);
   }
+const footballHtml = prepareFootballIndexHtml(
+  template,
+  articles
+);
 
+const footballDir = resolve(dist, "football");
+
+mkdirSync(footballDir, { recursive: true });
+
+writeFileSync(
+  resolve(footballDir, "index.html"),
+  footballHtml,
+  "utf8"
+);
+
+console.log("Generated: /football/");
   console.log(`\nتم توليد ${articles.length} صفحة مقال بنجاح.`);
 } catch (error) {
   console.error("فشل توليد صفحات المقالات:", error);
