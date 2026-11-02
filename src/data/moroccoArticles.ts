@@ -70,7 +70,7 @@ export const MOROCCO_ARTICLES: readonly Article[] = [
     "kawkab-marrakech-strong-start-botola-2026",
     "benhasham-al-ahly-eight-players",
   ],
-}
+},
   {
   slug: "codm-protests-refereeing-far-2026",
   title: "النادي المكناسي يحتج على التحكيم بعد التعادل أمام الجيش الملكي",
