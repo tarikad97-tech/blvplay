@@ -1,10 +1,10 @@
-
 import { useMemo, useState } from "react";
 import { ChallengeCard } from "../../components/ChallengeCard";
 import {
   CHALLENGES,
   type PlayMode,
 } from "../../data/challenges";
+import { Link } from "../../lib/router";
 import { useMeta } from "../../lib/useMeta";
 
 /**
@@ -160,6 +160,21 @@ export function Challenges() {
           </button>
         </div>
       )}
+
+      <section className="prose" aria-labelledby="how-to-choose">
+        <h2 id="how-to-choose">كيف تختار التحدي المناسب؟</h2>
+        <p>
+          تختلف التحديات في طريقتها: بعضها يطلب منك <b>ترتيب لاعبين</b> بحسب معيار تحدده أنت، وبعضها يضع
+          <b> فريقاً أمام فريق</b> لتختار الأقوى، وبعضها يطلب <b>بناء تشكيلة</b> كاملة. إذا كنت جديداً فابدأ بتحدٍّ
+          قصير بوضع المشجع، فهو لا يحتاج كاميرا ولا حساباً.
+        </p>
+        <p>
+          وإذا كنت صانع محتوى فاختر تحدياً يحمل وسم «للتصوير»، فتظهر أسئلته واختياراتك داخل فيديو عمودي جاهز
+          للنشر. لمعرفة الخطوات كاملة اقرأ صفحة{" "}
+          <Link to="/how-it-works" className="link">كيف تعمل المنصة</Link>، ولقراءة ما يجري في الكرة المغربية قبل أن
+          تلعب زر <Link to="/football" className="link">المقالات</Link>.
+        </p>
+      </section>
     </div>
   );
 }
