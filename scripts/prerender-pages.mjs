@@ -22,61 +22,61 @@ const pages = [
       "اكتشف أخبار كرة القدم المغربية وتحليلاتها، وشارك في تحديات تفاعلية ممتعة لعشاق كرة القدم.",
   },
   {
-    path: "/challenges",
+    path: "/challenges/",
     title: "تحديات كرة القدم التفاعلية | BLV Play",
     description:
       "اكتشف تحديات كرة القدم التفاعلية، واختر وضع اللعب دون كاميرا أو وضع التصوير عندما يكون متاحًا.",
   },
   {
-    path: "/create",
+    path: "/create/",
     title: "صانع المحتوى — صوّر تحديك | BLV Play",
     description:
       "اختر تحدياً وصوّر مشاركتك بالكاميرا والميكروفون لإنتاج فيديو عمودي جاهز لـ Reels وTikTok وShorts.",
   },
   {
-    path: "/play",
+    path: "/play/",
     title: "وضع المشجع — العب بدون تصوير | BLV Play",
     description:
       "العب تحديات كرة القدم دون كاميرا: اختر لاعبيك، ابنِ تشكيلتك، وانتهِ ببطاقة نتيجة تشاركها.",
   },
   {
-    path: "/how-it-works",
+    path: "/how-it-works/",
     title: "كيف تعمل المنصة | BLV Play",
     description:
       "تعرف على طريقة استخدام BLV Play، واكتشف خطوات المشاركة في تحديات كرة القدم ووضع اللعب المناسب لك.",
   },
   {
-    path: "/about",
+    path: "/about/",
     title: "من نحن | BLV Play",
     description:
       "تعرف على BLV Play، ومهمتنا في تقديم محتوى كرة قدم وتحديات تفاعلية لعشاق اللعبة.",
   },
   {
-    path: "/contact",
+    path: "/contact/",
     title: "اتصل بنا | BLV Play",
     description:
       "تواصل مع فريق BLV Play لإرسال اقتراح أو الإبلاغ عن مشكلة أو تقديم طلب يخص الخصوصية.",
   },
   {
-    path: "/faq",
+    path: "/faq/",
     title: "الأسئلة الشائعة | BLV Play",
     description:
       "إجابات عن الأسئلة الشائعة حول تحديات BLV Play، والتصوير، والخصوصية، وطريقة اللعب.",
   },
   {
-    path: "/privacy-policy",
+    path: "/privacy-policy/",
     title: "سياسة الخصوصية | BLV Play",
     description:
       "تعرف على كيفية تعامل BLV Play مع البيانات والخصوصية والتخزين داخل الموقع.",
   },
   {
-    path: "/terms",
+    path: "/terms/",
     title: "شروط الاستخدام | BLV Play",
     description:
       "اقرأ شروط استخدام موقع BLV Play والمقالات وتحديات كرة القدم التفاعلية.",
   },
   {
-    path: "/cookie-policy",
+    path: "/cookie-policy/",
     title: "سياسة ملفات تعريف الارتباط | BLV Play",
     description:
       "تعرف على استخدام ملفات تعريف الارتباط والتقنيات المشابهة في موقع BLV Play.",

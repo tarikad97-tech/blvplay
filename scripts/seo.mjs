@@ -9,17 +9,17 @@ const site = (process.env.SITE_URL || "https://blvplay.site")
 
 const pages = [
   "/",
-  "/challenges",
-  "/create",
-  "/play",
-  "/how-it-works",
-  "/about",
-  "/contact",
+  "/challenges/",
+  "/create/",
+  "/play/",
+  "/how-it-works/",
+  "/about/",
+  "/contact/",
   "/football/",
-  "/faq",
-  "/privacy-policy",
-  "/terms",
-  "/cookie-policy",
+  "/faq/",
+  "/privacy-policy/",
+  "/terms/",
+  "/cookie-policy/",
 ];
 
 // Read article slugs from both article files.
