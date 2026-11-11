@@ -294,7 +294,7 @@ export function ArticleCard({
         </div>
 
         <Heading className="acard__title">
-          <Link to={`/football/${article.slug}`} className="acard__link">
+          <Link to={`/football/${article.slug}/`} className="acard__link">
             {article.title}
           </Link>
         </Heading>

@@ -15,7 +15,7 @@ const pages = [
   "/how-it-works",
   "/about",
   "/contact",
-  "/football",
+  "/football/",
   "/faq",
   "/privacy-policy",
   "/terms",
@@ -38,7 +38,7 @@ for (const file of articleFiles) {
     const slug = match[1].trim();
 
     if (slug) {
-      pages.push(`/football/${slug}`);
+      pages.push(`/football/${slug}/`);
     }
   }
 }

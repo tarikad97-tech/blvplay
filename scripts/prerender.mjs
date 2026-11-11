@@ -80,7 +80,7 @@ function renderArticle(article, getArticle) {
         <ul>
           ${related.map((item) => `
             <li>
-              <a class="link" href="/football/${encodeURIComponent(item.slug)}">
+              <a class="link" href="/football/${encodeURIComponent(item.slug)}/">
                 ${escapeHtml(item.title)}
               </a>
             </li>
@@ -95,7 +95,7 @@ function renderArticle(article, getArticle) {
 
   return `
     <div class="container page prose">
-      <p><a href="/football" class="link">← مركز المقالات</a></p>
+      <p><a href="/football/" class="link">← مركز المقالات</a></p>
       <h1>${escapeHtml(article.title)}</h1>
       <p class="muted">
         <span class="chip">${escapeHtml(article.category)}</span>
@@ -124,7 +124,7 @@ function replaceMeta(html, attribute, key, value) {
 }
 
 function prepareHtml(template, article, articlesBySlug) {
-  const url = `${site}/football/${article.slug}`;
+  const url = `${site}/football/${article.slug}/`;
   const description = article.excerpt || article.title;
   const image = absoluteUrl(article.image?.src || "/og-image.png");
 
@@ -209,7 +209,7 @@ function prepareFootballIndexHtml(template, articles) {
 
   const cardsHtml = sorted
     .map((article, index) => {
-      const url = `/football/${encodeURIComponent(article.slug)}`;
+      const url = `/football/${encodeURIComponent(article.slug)}/`;
 
       const cover = article.image?.src
         ? `
@@ -282,13 +282,13 @@ function prepareFootballIndexHtml(template, articles) {
 
   html = html.replace(
     "</head>",
-    `  <link rel="canonical" href="${site}/football" />\n  </head>`
+    `  <link rel="canonical" href="${site}/football/" />\n  </head>`
   );
 
   html = replaceMeta(html, "name", "description", description);
   html = replaceMeta(html, "property", "og:title", title);
   html = replaceMeta(html, "property", "og:description", description);
-  html = replaceMeta(html, "property", "og:url", `${site}/football`);
+  html = replaceMeta(html, "property", "og:url", `${site}/football/`);
   html = replaceMeta(html, "property", "og:type", "website");
 
   if (!html.includes('<div id="root"></div>')) {

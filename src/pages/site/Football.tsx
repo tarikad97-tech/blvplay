@@ -55,7 +55,7 @@ export function ArticlePage({ slug }: { slug: string }) {
   const related = article.related.map(getArticle).filter((a) => a !== undefined);
   return (
     <div className="container page prose">
-      <p><Link to="/football" className="link">← مركز المقالات</Link></p>
+      <p><Link to="/football/" className="link">← مركز المقالات</Link></p>
       <h1>{article.title}</h1>
       <p className="muted"><span className="chip">{article.category}</span> <time dateTime={article.date}>{fmt(article.date)}</time></p>
       {article.image && <Figure image={article.image} cover />}
@@ -68,7 +68,7 @@ export function ArticlePage({ slug }: { slug: string }) {
       ))}
       <aside className="related">
         <h2>مقالات ذات صلة</h2>
-        <ul>{related.map((r) => <li key={r.slug}><Link to={`/football/${r.slug}`} className="link">{r.title}</Link></li>)}</ul>
+        <ul>{related.map((r) => <li key={r.slug}><Link to={`/football/${r.slug}/`} className="link">{r.title}</Link></li>)}</ul>
         <p><Link to="/play" className="btn btn--primary">جرّب تحدياً الآن</Link></p>
       </aside>
     </div>
